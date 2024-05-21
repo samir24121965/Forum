@@ -1,0 +1,103 @@
+package main
+
+import (
+	"fmt"
+	"log"
+
+	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
+	// le underscore (_) c'est un alias
+)
+
+type User struct {
+	Id         int
+	Name       string
+	Created_at string
+}
+
+type config struct {
+	port int
+	db   database
+}
+
+func main() {
+	var cfg config
+
+	cfg.port = 8080
+	cfg.db.dbName = "forum.db"
+	cfg.db.driver = "sqlite3"
+	forumDB, err := cfg.db.openDB()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer forumDB.Close()
+
+	err = createDB(forumDB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Good")
+
+	// var insert_user = `
+	// Insert into user (id,name,email, password, created_at, updated_at)
+	// 	values (null, 'Francesco', 'franc@gmail.com', '896Franc', CURRENT_TIMESTAMP, datetime('now'))`
+
+	// stmt, err = forumDB.Prepare(insert_user)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+	// stmt.Exec()
+
+	rows, err := forumDB.Query(`SELECT id, name, strftime('%d/%m/%Y', created_at) as created_at 
+	FROM user 
+	where date(created_at) between date('2023-03-28') and date('2023-03-29')
+	`)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	user := User{}
+	for rows.Next() {
+		rows.Scan(&user.Id, &user.Name, &user.Created_at)
+		fmt.Printf("User: %v\n", user)
+	}
+
+	tableName, err := forumDB.Query(`
+	SELECT
+		name 
+	FROM
+		sqlite_master 
+	WHERE
+		type ='table' AND
+		name NOT LIKE 'sqlite_%'
+	`)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var name string
+	for tableName.Next() {
+		tableName.Scan(&name)
+		fmt.Printf("Table: %v\n", name)
+	}
+
+	structTable, err := forumDB.Query(`
+	SELECT 
+    	*
+	FROM 
+		PRAGMA_TABLE_INFO('user')
+	
+	`)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var column, types, dflt_value string
+	var pk int64
+
+	for structTable.Next() {
+		structTable.Scan(&column, &types, &dflt_value, &pk)
+		fmt.Printf("Column: %v, type: %v, DefaultV: %v, PK: %v\n", column, types, dflt_value, pk)
+	}
+}

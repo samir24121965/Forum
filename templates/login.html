@@ -1,0 +1,25 @@
+{{define "login"}}
+<div class="boxLogin">
+    <div class="containerLogo">
+        <div class="cercle">
+            <img src="/templates/img/logo.png" alt="logo">
+        </div>
+    </div>
+
+    <div class="containerInputs">
+        <form method="post">
+            <input type="text" name="name" required maxlength="30" placeholder="utilisateur" 
+            autocomplete="off" value="{{.Name}}" autofocus>
+            <input type="password" name="password" required value="{{.Password}}" placeholder="mot de passe">
+            <button>Connexion</button>
+        </form>
+
+        <p class="txtFin"> <b>Vous n'avez pas de compte ?
+            <a href="/register">
+               Inscrivez-vous
+            </a>
+            </b> 
+        </p>
+    </div>
+</div>
+{{end}}

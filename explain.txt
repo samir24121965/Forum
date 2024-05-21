@@ -1,0 +1,5 @@
+1.  Install sqlite3 (DB.Browser.for.SQLite-3.12.2-win64.msi)
+2.  add the go-sqlite3 library from mattn to connect with SQLite
+    go get github.com/mattn/go-sqlite3
+3.  Import go-sqlite3 library
+    _ "github.com/mattn/go-sqlite3" 

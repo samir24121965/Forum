@@ -1,0 +1,28 @@
+{{define "register"}}
+<div class="boxRegister">
+
+    <h2>Inscription
+        <span class="logoTitre">
+            <img src="/templates/img/logo-inscription.jpg" alt="logo Inscription">
+        </span>
+    </h2>
+
+    <form method="post">
+         <div class="Inputs">
+            <label for="nom" class="labelName">Entrez votre nom</label>
+            <input type="text" name="name" id="name" autofocus required maxlength="40" 
+            class="nameInp" placeholder="Entrez votre nom" value="{{.Name}}">
+            <label for="email" class="labelEmail">Entrez votre Email</label>
+            <input type="email" name="email" id="email" class="emailInp"  required maxlength="50" 
+            autocomplete="off" placeholder="Entrez votre email" value="{{.Email}}">
+            <label for="password" class="labelpwd">Entrez votre mot de passe</label>
+            <input type="password" name="password" required  
+            class="pwdInp" placeholder="mot de passe" value="{{.Password}}">
+        </div>
+
+        <button>Inscrivez-vous</button>
+    </form>
+
+</div>
+
+{{end}}
